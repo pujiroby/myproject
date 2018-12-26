@@ -1,7 +1,7 @@
 <?php
     $host = "localhost";
     $username = "root";
-    $password = "4dm1n1234567";
+    $password = "";
     $databasename = "simbada-kotamalang-2018";
     $mysqli = new mysqli( $host, $username, $password, $databasename );
     if ($mysqli->connect_error){

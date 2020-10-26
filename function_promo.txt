@@ -1,0 +1,66 @@
+function THelper.Promo(AAmount: Real; Qty: Integer; APromo: String): TPromo;
+var
+  awl: Real;
+  cbk: Real;
+  iii: Integer;
+  lst: TStrings;
+  sss: string;
+  xxx: Integer;
+begin
+  cbk := 0;
+  awl := AAMount;
+  lst := TStringList.Create;
+  lst.Text := StringReplace(UpperCase(APromo), '+', #13#10, [rfReplaceAll]);
+
+  for iii := 0 to lst.Count - 1 do
+  begin
+    //cashback atau diskon;
+    sss := trim(lst[iii]);
+    cbk := 0;
+    if copy(sss, 1, 2) <> 'CB' then
+    begin
+      //jika diskon;
+      if RightStr(sss, 1) = 'K' then
+      begin
+        //jika Rp.
+        xxx := StrToIntDef(Copy(sss, 1, length(sss) - 1), 0);
+        AAmount := AAmount - (xxx * 1000) * qty;
+      end;
+
+      if RightStr(sss, 1) = '%' then
+      begin
+        //jika percent;
+        xxx := StrToIntDef(Copy(sss, 1, length(sss) - 1), 0);
+        AAmount := AAmount * (100 - xxx) / 100;
+      end;
+    end else
+    begin
+      //jika cashbak;
+      if RightStr(sss, 1) = 'K' then
+      begin
+        //jika Rp.
+        xxx := StrToIntDef(Copy(sss, 3, length(sss) - 3), 0);
+        cbk := cbk + (xxx * 1000) * Qty;
+      end;
+
+      if RightStr(sss, 1) = '%' then
+      begin
+        //jika percent;
+        xxx := StrToIntDef(Copy(sss, 3, length(sss) - 3), 0);
+        cbk := cbk + AAmount * xxx / 100;
+      end;
+    end;
+  end;
+
+  result.Bayar    := AAmount;
+  result.Diskon   := Awl - AAmount;
+  result.CashBack := cbk;
+  Result.Hemat    := Awl - AAmount + cbk;
+
+end;
+TPromo = record
+    Bayar   : Real;
+    Diskon  : Real;
+    CashBack: Real;
+    Hemat   : Real;
+  end;
